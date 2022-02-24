@@ -9,7 +9,7 @@ export class AuthService {
 
   async login(user: User): Promise<string> {
     const token: string = uuidv4();
-    await this.keyv.set(token, user.id, 180000);
+    await this.keyv.set(token, user.id, 60 * 60000);
     return token;
   }
 

@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Task } from 'src/task/task.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class User {
@@ -15,6 +16,9 @@ export class User {
 
   @Column()
   email: string;
+
+  @OneToMany((type) => Task, (task) => task.user)
+  tasks: Task[];
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);
