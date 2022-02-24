@@ -1,14 +1,15 @@
 import {
   Body,
   ClassSerializerInterceptor,
-  ConflictException,
   Controller,
+  Delete,
   Get,
-  HttpCode,
-  Post,
+  Put,
+  Req,
   UseInterceptors,
 } from '@nestjs/common';
-import { CreateUserDto } from './user.dto';
+import { Request } from 'express';
+import { UpdateProfileDto } from './user.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 
@@ -18,18 +19,23 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async getUsers(): Promise<User[]> {
-    return await this.userService.findAllUsers();
+  async getUserInfo(@Req() request: Request): Promise<User> {
+    return request.res.locals.user;
   }
 
-  @Post()
-  @HttpCode(201)
-  async addNewUser(@Body() body: CreateUserDto): Promise<void> {
-    const duplicatedUser = await this.userService.findOneUser(
-      null,
-      body.username,
-    );
-    if (duplicatedUser) throw new ConflictException('User already exist');
-    await this.userService.createUser(body);
+  @Put()
+  async updateUserProfile(
+    @Req() request: Request,
+    @Body() body: UpdateProfileDto,
+  ): Promise<User> {
+    const user: User = request.res.locals.user;
+    const newUserInfo: User = await this.userService.updateUserInfo(user, body);
+    return newUserInfo;
+  }
+
+  @Delete()
+  async deleteAccount(@Req() request: Request): Promise<void> {
+    const user: User = request.res.locals.user;
+    await this.userService.deleteAccount(user);
   }
 }
