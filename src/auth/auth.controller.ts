@@ -10,12 +10,19 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
+import {
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Request } from 'express';
-import { CreateUserDto } from 'src/user/user.dto';
-import { UserService } from 'src/user/user.service';
+import { CreateUserDto } from '../user/user.dto';
+import { UserService } from '../user/user.service';
 import { LoginDto } from './auth.dto';
 import { AuthService } from './auth.service';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -26,6 +33,10 @@ export class AuthController {
 
   @Post('signup')
   @HttpCode(201)
+  @ApiConflictResponse({ description: 'User already exist.' })
+  @ApiCreatedResponse({
+    description: 'The user has been successfully created.',
+  })
   async signup(@Body() body: CreateUserDto): Promise<void> {
     const duplicatedUser = await this.userService.findOneUser(
       null,
@@ -36,6 +47,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @HttpCode(200)
   async login(@Body() body: LoginDto): Promise<{ token: string }> {
     const user = await this.userService.findOneUser(null, body.username);
     if (!user) throw new NotFoundException('User not found');

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import * as Keyv from 'keyv';
-import { User } from 'src/user/user.entity';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class AuthService {
-  keyv = new Keyv('mysql://admin:efftoreff@localhost:3306/token');
+  keyv = new Keyv('mysql://root:13791379@localhost:3306/token');
 
   async login(user: User): Promise<string> {
     const token: string = uuidv4();

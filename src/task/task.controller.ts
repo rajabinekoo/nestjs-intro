@@ -12,12 +12,15 @@ import {
   Req,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { User } from 'src/user/user.entity';
 import { ChangeIsCompletedTaskDto, CreateTaskDto } from './task.dto';
 import { Task } from './task.entity';
 import { TaskService } from './task.service';
 
+@ApiTags('Task')
+@ApiBearerAuth('access-token')
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('task')
 export class TaskController {

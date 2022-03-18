@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { Task } from 'src/task/task.entity';
+import { Task } from '../task/task.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()

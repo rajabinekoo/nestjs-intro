@@ -8,11 +8,14 @@ import {
   Req,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { UpdateProfileDto } from './user.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 
+@ApiTags('User')
+@ApiBearerAuth('access-token')
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
 export class UserController {
